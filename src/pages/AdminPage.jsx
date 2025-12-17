@@ -18,6 +18,21 @@ const AdminPage = () => {
         details: '',
         image: ''
     });
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
+
+    // Fetch Products
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(db, "products"), (snapshot) => {
+            const productsData = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setProducts(productsData);
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, []);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -63,21 +78,6 @@ const AdminPage = () => {
             </div>
         );
     }
-    const [submitting, setSubmitting] = useState(false);
-    const [error, setError] = useState('');
-
-    // Fetch Products
-    useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, "products"), (snapshot) => {
-            const productsData = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setProducts(productsData);
-            setLoading(false);
-        });
-        return () => unsubscribe();
-    }, []);
 
     const handleAddProduct = async (e) => {
         e.preventDefault();
