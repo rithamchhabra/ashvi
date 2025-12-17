@@ -7,13 +7,62 @@ const AdminPage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Password Protection State
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [passwordInput, setPasswordInput] = useState('');
+
     // Form State
     const [newItem, setNewItem] = useState({
         name: '',
         price: '',
         details: '',
-        image: '' // Now a generic URL string
+        image: ''
     });
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        if (passwordInput === 'ashvi@77') {
+            setIsAuthenticated(true);
+            localStorage.setItem('adminAuth', 'true');
+        } else {
+            alert('Incorrect Password');
+        }
+    };
+
+    useEffect(() => {
+        const isAuth = localStorage.getItem('adminAuth');
+        if (isAuth === 'true') {
+            setIsAuthenticated(true);
+        }
+    }, []);
+
+    if (!isAuthenticated) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+                <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
+                    <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">Admin Access</h2>
+                    <form onSubmit={handleLogin} className="space-y-6">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Enter Admin Password</label>
+                            <input
+                                type="password"
+                                value={passwordInput}
+                                onChange={(e) => setPasswordInput(e.target.value)}
+                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500"
+                                required
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Unlock Dashboard
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
 

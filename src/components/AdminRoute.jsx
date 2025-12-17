@@ -21,7 +21,7 @@ const AdminRoute = ({ children }) => {
         return <div className="text-center py-20">Loading...</div>;
     }
 
-    if (!user || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    if (!user) {
         return <Navigate to="/" replace />;
     }
 
